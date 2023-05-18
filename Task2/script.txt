@@ -1,0 +1,44 @@
+#!/bin/bash
+
+                                 # Directory where the CSV files are located
+csv_dir="/Task2/"
+
+# Read data from Departments.csv and store it in an associative array
+declare -A departments
+while IFS=, read -r id department; do
+    departments[$id]=$department
+done < "$csv_dir/Departments.csv"
+
+# Read data from Salaries.csv and calculate the average monthly salary for each employee
+declare -A avg_salaries
+declare -A salary_counts
+while IFS=, read -r emp_id month amount; do
+    if [ ${salary_counts[$emp_id]+_} ]; then
+        avg_salaries[$emp_id]=$((avg_salaries[$emp_id] + amount))
+        salary_counts[$emp_id]=$((salary_counts[$emp_id] + 1))
+    else
+        avg_salaries[$emp_id]=$amount
+        salary_counts[$emp_id]=1
+    fi
+done < "$csv_dir/Salaries.csv"
+
+# Calculate the average monthly salary for each employee
+for emp_id in "${!avg_salaries[@]}"; do
+    avg_salaries[$emp_id]=$((avg_salaries[$emp_id] / salary_counts[$emp_id]))
+done
+
+# Sort the departments based on average monthly salary in descending order
+sorted_departments=()
+for id in "${!departments[@]}"; do
+    sorted_departments+=("$id ${departments[$id]} ${avg_salaries[$id]}")
+done
+IFS=$'\n' sorted_departments=($(sort -k3 -nr <<<"${sorted_departments[*]}"))
+
+# Print the top 3 departments with their name and average monthly salary
+echo "Top 3 Departments:"
+for ((i = 0; i < 3 && i < ${#sorted_departments[@]}; i++)); do
+    line=(${sorted_departments[$i]})
+    echo "Department Name: ${line[1]}"
+    echo "Average Monthly Salary: ${line[2]}"
+    echo
+done

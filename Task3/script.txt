@@ -8,14 +8,16 @@ then
         OUT=1
         LIM=$((N - 10))
         for (( i=1; i<=$LIM; i++ ))                       # The loop condition is changed now it will run till the last value of limit 
-        do
-                OUT=$((OUT * i))
+                                                          # let n=10 LIM=0 
+        do 
+                OUT=$((OUT * i))                          # OUT = 1
         done
 else
         LIM=$((N - 20))
         OUT=$((LIM * LIM))
         OUT=$((OUT + LIM))                                # Here + sign is added to add the sum into the out value then we will get correct answer . 
-        OUT=$((OUT / 2))
+        OUT=$((OUT / 2))                                  # let n=21  LIM=1   OUT=2 
+                                                          # out(final) =1 
 fi
 echo $OUT
 
