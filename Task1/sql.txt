@@ -1,0 +1,21 @@
+The SQL query will be 
+
+SELECT Departments.Department, AVG(Saleries.AMT) AS AVG_MONTHLY_SALARY (USD)
+FROM Departments 
+JOIN Employees ON Departments.ID = Employees.DEPT_ID
+JOIN Salaries ON Employees.EMP_ID = Salaries.EMP_ID
+GROUP BY Departments.Department
+ORDER BY AVG_MONTHLY_SALARY DESC
+LIMIT 3;
+
+
+So here we have three databases Departments, Employees, Salaries  
+the schema looks like  Departments = department id, name of the department
+Employees = employee id, name, dept id
+salaries  = employee id, month, amount 
+
+first, we have to select which output we need here we select the department name and avg amount. after that, we need to join the tables
+by using the join keyword. we need common property to join both tables so in the first table we have Departments.ID = Employees.DEPT_ID 
+and in another table we have Employees.EMP_ID = Salaries.EMP_ID now all table is connected. now we need a group table on the basis of departments
+for that we are using group key word here, we need output in descending order. at last need, only the top three depts so need to use the LIMIT keyword here.     
+ 
